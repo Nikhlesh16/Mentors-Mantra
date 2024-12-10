@@ -1,35 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Firebase Test</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js"></script>
-    <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firebase Test</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="script.js" defer></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Firebase Test Website</h1>
+  <div class="container">
+    <h1>Firebase Test Website</h1>
 
-        <!-- Form to Save Data -->
-        <h2>Save Data</h2>
-        <label for="userId">User ID:</label>
-        <input type="text" id="userId" placeholder="Enter User ID"><br>
-        <label for="name">Name:</label>
-        <input type="text" id="name" placeholder="Enter Name"><br>
-        <button id="saveButton">Save to Firebase</button>
+    <!-- Form to Save Data -->
+    <h2>Save Data</h2>
+    <label for="userId">User ID:</label>
+    <input type="text" id="userId" placeholder="Enter User ID"><br>
+    <label for="name">Name:</label>
+    <input type="text" id="name" placeholder="Enter Name"><br>
+    <button id="saveButton">Save to Firebase</button>
 
-        <!-- Form to Retrieve Data -->
-        <h2>Retrieve Data</h2>
-        <label for="retrieveId">User ID:</label>
-        <input type="text" id="retrieveId" placeholder="Enter User ID"><br>
-        <button id="retrieveButton">Retrieve from Firebase</button>
+    <!-- Form to Retrieve Data -->
+    <h2>Retrieve Data</h2>
+    <label for="retrieveId">User ID:</label>
+    <input type="text" id="retrieveId" placeholder="Enter User ID"><br>
+    <button id="retrieveButton">Retrieve from Firebase</button>
 
-        <!-- Display Result -->
-        <div id="output"></div>
-    </div>
+    <!-- Display Result -->
+    <div id="output"></div>
+  </div>
 </body>
 </html>
