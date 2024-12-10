@@ -12,7 +12,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
+const database = firebase.database(app);
 
 // Save Data to Firebase
 document.getElementById("saveButton").addEventListener("click", () => {
