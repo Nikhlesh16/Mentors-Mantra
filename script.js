@@ -1,12 +1,12 @@
 // Firebase Configuration
-const firebaseConfig = {
-    apiKey: "your-api-key",
-    authDomain: "your-auth-domain",
-    databaseURL: "your-database-url",
-    projectId: "your-project-id",
-    storageBucket: "your-storage-bucket",
-    messagingSenderId: "your-messaging-sender-id",
-    appId: "your-app-id"
+  apiKey: "AIzaSyCDXF9nNtORTSTLapak8ihSETsiuhXX2fE",
+  authDomain: "first-8ab84.firebaseapp.com",
+  databaseURL: "https://first-8ab84-default-rtdb.firebaseio.com",
+  projectId: "first-8ab84",
+  storageBucket: "first-8ab84.firebasestorage.app",
+  messagingSenderId: "485126412456",
+  appId: "1:485126412456:web:25b1479c27886c1a5c0a9d",
+  measurementId: "G-SN2WK27JLZ"
 };
 
 // Initialize Firebase
