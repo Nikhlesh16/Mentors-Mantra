@@ -1,3 +1,7 @@
+// Import Firebase SDKs
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
 // Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyCDXF9nNtORTSTLapak8ihSETsiuhXX2fE",
@@ -7,47 +11,52 @@ const firebaseConfig = {
   storageBucket: "first-8ab84.firebasestorage.app",
   messagingSenderId: "485126412456",
   appId: "1:485126412456:web:25b1479c27886c1a5c0a9d",
-  measurementId: "G-SN2WK27JLZ"
+  measurementId: "G-SN2WK27JLZ",
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database(app);
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
 // Save Data to Firebase
 document.getElementById("saveButton").addEventListener("click", () => {
-    const userId = document.getElementById("userId").value;
-    const name = document.getElementById("name").value;
+  const userId = document.getElementById("userId").value.trim();
+  const name = document.getElementById("name").value.trim();
 
-    if (userId && name) {
-        firebase.database().ref('users/' + userId).set({
-            name: name
-        }).then(() => {
-            alert("Data saved successfully!");
-        }).catch(error => {
-            console.error("Error saving data:", error);
-        });
-    } else {
-        alert("Please enter both User ID and Name.");
-    }
+  if (userId && name) {
+    set(ref(database, 'users/' + userId), {
+      name: name,
+    })
+      .then(() => {
+        alert("Data saved successfully!");
+      })
+      .catch((error) => {
+        console.error("Error saving data:", error);
+      });
+  } else {
+    alert("Please enter both User ID and Name.");
+  }
 });
 
 // Retrieve Data from Firebase
 document.getElementById("retrieveButton").addEventListener("click", () => {
-    const userId = document.getElementById("retrieveId").value;
+  const userId = document.getElementById("retrieveId").value.trim();
 
-    if (userId) {
-        firebase.database().ref('users/' + userId).once('value').then(snapshot => {
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                document.getElementById("output").textContent = `Name: ${data.name}`;
-            } else {
-                document.getElementById("output").textContent = "No data found.";
-            }
-        }).catch(error => {
-            console.error("Error retrieving data:", error);
-        });
-    } else {
-        alert("Please enter a User ID.");
-    }
+  if (userId) {
+    const dbRef = ref(database);
+    get(child(dbRef, `users/${userId}`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          document.getElementById("output").textContent = `Name: ${data.name}`;
+        } else {
+          document.getElementById("output").textContent = "No data found.";
+        }
+      })
+      .catch((error) => {
+        console.error("Error retrieving data:", error);
+      });
+  } else {
+    alert("Please enter a User ID.");
+  }
 });
