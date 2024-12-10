@@ -1,4 +1,5 @@
 // Firebase Configuration
+const firebaseConfig = {
   apiKey: "AIzaSyCDXF9nNtORTSTLapak8ihSETsiuhXX2fE",
   authDomain: "first-8ab84.firebaseapp.com",
   databaseURL: "https://first-8ab84-default-rtdb.firebaseio.com",
