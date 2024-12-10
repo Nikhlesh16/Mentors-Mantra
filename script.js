@@ -11,15 +11,16 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database(app);
+const app = initializeApp(firebaseConfig);
+const database = getDatabase(app);
 
 // Save Data to Firebase
 document.getElementById("saveButton").addEventListener("click", () => {
     const userId = document.getElementById("userId").value;
     const name = document.getElementById("name").value;
 
-    firebase.database().ref('users/' + userId).set({
+    // Saving data to Firebase
+    set(ref(database, 'users/' + userId), {
         name: name
     }).then(() => {
         alert("Data saved successfully!");
@@ -32,7 +33,9 @@ document.getElementById("saveButton").addEventListener("click", () => {
 document.getElementById("retrieveButton").addEventListener("click", () => {
     const userId = document.getElementById("retrieveId").value;
 
-    firebase.database().ref('users/' + userId).once('value').then(snapshot => {
+    // Retrieving data from Firebase
+    const userRef = ref(database, 'users/' + userId);
+    get(userRef).then(snapshot => {
         if (snapshot.exists()) {
             const data = snapshot.val();
             document.getElementById("output").textContent = `Name: ${data.name}`;
