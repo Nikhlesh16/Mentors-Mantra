@@ -11,38 +11,43 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const database = getDatabase(app);
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database(app);
 
 // Save Data to Firebase
 document.getElementById("saveButton").addEventListener("click", () => {
     const userId = document.getElementById("userId").value;
     const name = document.getElementById("name").value;
 
-    // Saving data to Firebase
-    set(ref(database, 'users/' + userId), {
-        name: name
-    }).then(() => {
-        alert("Data saved successfully!");
-    }).catch(error => {
-        console.error("Error saving data:", error);
-    });
+    if (userId && name) {
+        firebase.database().ref('users/' + userId).set({
+            name: name
+        }).then(() => {
+            alert("Data saved successfully!");
+        }).catch(error => {
+            console.error("Error saving data:", error);
+        });
+    } else {
+        alert("Please enter both User ID and Name.");
+    }
 });
 
 // Retrieve Data from Firebase
 document.getElementById("retrieveButton").addEventListener("click", () => {
     const userId = document.getElementById("retrieveId").value;
 
-    // Retrieving data from Firebase
-    const userRef = ref(database, 'users/' + userId);
-    get(userRef).then(snapshot => {
-        if (snapshot.exists()) {
-            const data = snapshot.val();
-            document.getElementById("output").textContent = `Name: ${data.name}`;
-        } else {
-            document.getElementById("output").textContent = "No data found.";
-        }
-    }).catch(error => {
-        console.error("Error retrieving data:", error);
-    });
+    if (userId) {
+        firebase.database().ref('users/' + userId).once('value').then(snapshot => {
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                document.getElementById("output").textContent = `Name: ${data.name}`;
+            } else {
+                document.getElementById("output").textContent = "No data found.";
+            }
+        }).catch(error => {
+            console.error("Error retrieving data:", error);
+        });
+    } else {
+        alert("Please enter a User ID.");
+    }
 });
