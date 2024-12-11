@@ -1,6 +1,6 @@
 // Import Firebase SDKs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
-import { getDatabase, ref, set, get, child } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+import { getDatabase, ref, set, get, child, update } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
 
 // Firebase Configuration
 const firebaseConfig = {
@@ -18,45 +18,70 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-// Save Data to Firebase
+// Save Data and Update Ranks
 document.getElementById("saveButton").addEventListener("click", () => {
-  const userId = document.getElementById("userId").value.trim();
-  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const marks = parseInt(document.getElementById("marks").value.trim(), 10);
 
-  if (userId && name) {
-    set(ref(database, 'users/' + userId), {
-      name: name,
+  if (email && !isNaN(marks)) {
+    const userRef = ref(database, 'users/' + email.replace(/\./g, ','));
+    set(userRef, { marks })
+      .then(() => updateRanks())
+      .catch((error) => console.error("Error saving data:", error));
+  } else {
+    alert("Please enter a valid email and marks.");
+  }
+});
+
+// Update Ranks
+function updateRanks() {
+  const usersRef = ref(database, 'users');
+  get(usersRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const users = snapshot.val();
+        const userList = Object.entries(users)
+          .map(([key, value]) => ({
+            email: key.replace(/,/g, '.'),
+            marks: value.marks,
+          }))
+          .sort((a, b) => b.marks - a.marks);
+
+        // Update Ranks in Database
+        const updates = {};
+        userList.forEach((user, index) => {
+          updates[`users/${user.email.replace(/\./g, ',')}/rank`] = index + 1;
+        });
+        return update(ref(database), updates);
+      }
     })
-      .then(() => {
-        alert("Data saved successfully!");
-      })
-      .catch((error) => {
-        console.error("Error saving data:", error);
-      });
-  } else {
-    alert("Please enter both User ID and Name.");
-  }
-});
+    .then(() => displayLeaderboard())
+    .catch((error) => console.error("Error updating ranks:", error));
+}
 
-// Retrieve Data from Firebase
-document.getElementById("retrieveButton").addEventListener("click", () => {
-  const userId = document.getElementById("retrieveId").value.trim();
+// Display Leaderboard
+function displayLeaderboard() {
+  const usersRef = ref(database, 'users');
+  get(usersRef)
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const users = snapshot.val();
+        const userList = Object.entries(users)
+          .map(([key, value]) => ({
+            email: key.replace(/,/g, '.'),
+            marks: value.marks,
+            rank: value.rank,
+          }))
+          .sort((a, b) => a.rank - b.rank);
 
-  if (userId) {
-    const dbRef = ref(database);
-    get(child(dbRef, `users/${userId}`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          document.getElementById("output").textContent = `Name: ${data.name}`;
-        } else {
-          document.getElementById("output").textContent = "No data found.";
-        }
-      })
-      .catch((error) => {
-        console.error("Error retrieving data:", error);
-      });
-  } else {
-    alert("Please enter a User ID.");
-  }
-});
+        const leaderboard = document.getElementById("leaderboard");
+        leaderboard.innerHTML = userList
+          .map((user) => `<p>Rank ${user.rank}: ${user.email} - ${user.marks} marks</p>`)
+          .join('');
+      }
+    })
+    .catch((error) => console.error("Error retrieving leaderboard:", error));
+}
+
+// Initial Display
+displayLeaderboard();
