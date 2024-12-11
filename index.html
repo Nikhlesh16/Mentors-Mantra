@@ -3,25 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ranked Leaderboard</title>
+  <title>Test and Results</title>
   <link rel="stylesheet" href="style.css">
   <script type="module" src="script.js" defer></script>
 </head>
 <body>
   <div class="container">
-    <h1>Leaderboard</h1>
+    <h1>Take the Test</h1>
+    
+    <!-- Test Section -->
+    <div id="test-section">
+      <label for="email">Enter Your Email:</label>
+      <input type="email" id="email" placeholder="Enter your email"><br>
 
-    <!-- Form to Save Data -->
-    <h2>Add Marks</h2>
-    <label for="email">Email:</label>
-    <input type="email" id="email" placeholder="Enter Email"><br>
-    <label for="marks">Marks:</label>
-    <input type="number" id="marks" placeholder="Enter Marks"><br>
-    <button id="saveButton">Save and Update Rank</button>
+      <h2>Your Test</h2>
+      <button id="submitTest">Submit Test</button>
+    </div>
 
-    <!-- Display Leaderboard -->
-    <h2>Leaderboard</h2>
-    <div id="leaderboard"></div>
+    <!-- Results Section -->
+    <div id="result-section" style="display:none;">
+      <h2>Your Results</h2>
+      <p id="marks">Marks: </p>
+      <p id="rank">Rank: </p>
+    </div>
   </div>
 </body>
 </html>
